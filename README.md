@@ -74,7 +74,7 @@ You can define an icon from Kirby's [icon set](https://getkirby.com/docs/referen
 Title: Editing Content
 ```
 
-If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_editing" → "Editing").
+If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_editing" → "Editing"). If you're not having to deal with German Ümläuts (or other fancy characters) in your folder names, don't worry about it.
 
 ## Options
 
