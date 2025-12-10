@@ -1,6 +1,6 @@
 # Kirby Help View
 
-A [Kirby](https://getkirby.com/) plugin that adds a help section to the Panel for your clients.
+A [Kirby](https://getkirby.com/) plugin that adds a help view to the Panel for your clients.
 
 ## Features
 
