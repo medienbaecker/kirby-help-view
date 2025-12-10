@@ -92,6 +92,10 @@ return [
 - Images in articles are served via an API route _without_ authentication. This means help screenshots are technically accessible without Panel login if someone guesses the URL. For most use cases this is fine since help content isn't sensitive but be aware of this if you include confidential information in help images. If you have a better idea how to handle this, please let me know.
 - The help menu item only appears if the `site/help` folder exists.
 
+## Requirements
+
+Kirby 5.2.0 or higher (I'm using the new `Str::label()` method)
+
 ## Installation
 
 ### Composer
@@ -103,3 +107,7 @@ composer require medienbaecker/kirby-help-view
 ### Manual
 
 Download and copy this repository to `site/plugins/kirby-help-view`.
+
+## Credits
+
+[kirby-helpsection](https://github.com/amteich/kirby-helpsection) by amteich was the original inspiration for this plugin. I've been using it for years and my clients loved it. Unfortunately it has not been updated since 2021 and is not compatible with Kirby 5, so I created this new version from scratch, trying to stick to core components as much as possible.
