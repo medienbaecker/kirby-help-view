@@ -64,7 +64,7 @@ Your help content here with **KirbyText** support.
 (image: screenshot.png)
 ```
 
-You can define an icon from Kirby's [icon set](https://getkirby.com/docs/panel/icons) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
+You can define an icon from Kirby's [icon set](https://getkirby.com/docs/reference/panel/icons) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
 ### Example category
 
