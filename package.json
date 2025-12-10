@@ -1,0 +1,10 @@
+{
+  "name": "kirby-help-view",
+  "scripts": {
+    "dev": "kirbyup src/index.js --watch",
+    "build": "kirbyup src/index.js"
+  },
+  "devDependencies": {
+    "kirbyup": "^3.3.0"
+  }
+}
