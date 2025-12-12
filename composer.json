@@ -3,7 +3,7 @@
 	"description": "Display help articles directly in the Kirby Panel",
 	"type": "kirby-plugin",
 	"license": "MIT",
-	"version": "1.0.0",
+	"version": "1.1.2",
 	"authors": [
 		{
 			"name": "Thomas Günther",
