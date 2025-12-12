@@ -11,7 +11,6 @@ class Help
 {
 	public static function articles(string $root): array
 	{
-		$ext      = kirby()->contentExtension();
 		$articles = [];
 
 		if (Dir::exists($root) === false) {
@@ -24,17 +23,17 @@ class Help
 		foreach ($items as $item) {
 			$path = $root . '/' . $item;
 
-			if (is_dir($path) === false) {
+			if (Dir::exists($path) === false) {
 				continue;
 			}
 
-			$articleFile = $path . '/article.' . $ext;
+			$articleFile = self::contentFile($path, 'article');
 			if (F::exists($articleFile)) {
 				$articles[] = self::parseArticle($path, $root);
 				continue;
 			}
 
-			$categoryFile  = $path . '/category.' . $ext;
+			$categoryFile = self::contentFile($path, 'category');
 			$categoryTitle = Str::label(self::slug($item));
 
 			if (F::exists($categoryFile)) {
@@ -53,9 +52,9 @@ class Help
 
 			foreach ($children as $child) {
 				$childPath    = $path . '/' . $child;
-				$childArticle = $childPath . '/article.' . $ext;
+				$childArticle = self::contentFile($childPath, 'article');
 
-				if (is_dir($childPath) && F::exists($childArticle)) {
+				if (Dir::exists($childPath) && F::exists($childArticle)) {
 					$category['children'][] = self::parseArticle($childPath, $root);
 				}
 			}
@@ -89,8 +88,7 @@ class Help
 
 	private static function parseArticle(string $folder, string $root): array
 	{
-		$ext  = kirby()->contentExtension();
-		$file = $folder . '/article.' . $ext;
+		$file = self::contentFile($folder, 'article');
 		$data = Txt::read($file);
 
 		$slug  = self::slug(basename($folder));
@@ -123,5 +121,24 @@ class Help
 			return substr($name, $pos + 1);
 		}
 		return $name;
+	}
+
+	private static function contentFile(string $path, string $name): string
+	{
+		$kirby = kirby();
+		$ext = $kirby->contentExtension();
+		$simple = $path . '/' . $name . '.' . $ext;
+
+		// Use Panel language from user settings
+		$lang = $kirby->user()->language();
+
+		// Try Panel language first
+		$file = $path . '/' . $name . '.' . $lang . '.' . $ext;
+		if (F::exists($file)) {
+			return $file;
+		}
+
+		// Fallback to simple filename (no language code)
+		return $simple;
 	}
 }

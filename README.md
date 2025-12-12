@@ -10,6 +10,7 @@ A [Kirby](https://getkirby.com/) plugin that adds a help view to the Panel for y
 - Icons and colors for each article card
 - Previous/next navigation between articles
 - Breadcrumbs for nested articles
+- Multilanguage support
 
 ![Screenshot of the overview with cards for help articles](https://github.com/user-attachments/assets/996aa373-e4ad-4104-9c36-0401ff12d59d)
 ![Screenshot of an article view](https://github.com/user-attachments/assets/5f389432-cefe-4c6c-813b-1f9f0035b5fd)
@@ -20,7 +21,10 @@ Create a `site/help` folder with your articles:
 
 ```
 site/help/
-├── 1_getting-started/article.txt
+├── 1_getting-started/
+│   ├── article.txt
+│   ├── article.de.txt
+│   └── article.ja.txt
 ├── 2_editing/
 │   ├── category.txt
 │   ├── 1_text/article.txt
@@ -31,6 +35,7 @@ site/help/
 - Number prefixes (`1_`, `2_`) control the order
 - Folders with `article.txt` become articles
 - Folders without `article.txt` but with subfolders containing articles become categories. You can add an optional `category.txt` to overwrite the title.
+- For multilanguage support, add language codes to filenames (e.g. `article.de.txt`). Depending on the user's Panel language, the appropriate article version will be shown.
 
 Seems familiar, doesn't it? I tried to keep it close to Kirby's content structure while also keeping it out of the actual site content so you don't accidentally expose help articles on the public site.
 
