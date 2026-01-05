@@ -88,15 +88,7 @@ export default {
 			};
 		},
 		categoryItems(category) {
-			return category.children.map(child => ({
-				text: child.title,
-				link: '/help/' + child.slug,
-				image: {
-					icon: child.icon,
-					color: child.color,
-					back: child.back
-				}
-			}));
+			return category.children.map(this.articleItem);
 		}
 	}
 };

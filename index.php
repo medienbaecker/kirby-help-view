@@ -14,25 +14,6 @@ Kirby::plugin('medienbaecker/help-view', [
 	'options' => [
 		'root' => null,
 	],
-	'hooks' => [
-		// Protect code blocks from KirbyTag parsing
-		'kirbytags:before' => function (string $text): string {
-			// Replace fenced code blocks with placeholders
-			return preg_replace_callback(
-				'/```[\s\S]*?```|`[^`\n]+`/',
-				fn($m) => '{{CODE:' . base64_encode($m[0]) . '}}',
-				$text
-			);
-		},
-		'kirbytags:after' => function (string $text): string {
-			// Restore code blocks from placeholders
-			return preg_replace_callback(
-				'/\{\{CODE:([A-Za-z0-9+\/=]+)\}\}/',
-				fn($m) => base64_decode($m[1]),
-				$text
-			);
-		}
-	],
 	'translations' => A::keyBy(
 		A::map(
 			Dir::read(__DIR__ . '/translations'),
@@ -54,23 +35,31 @@ Kirby::plugin('medienbaecker/help-view', [
 			[
 				'pattern' => 'help/image/(:all)',
 				'auth'    => false,
-				'action'  => function (string $path) {
-					$root = kirby()->option('medienbaecker.help-view.root')
-						?? kirby()->root('site') . '/help';
-					$file = $root . '/' . $path;
+				'action'  => function (string $path): Response {
+					$root = Help::root();
+					$rootReal = realpath($root);
 
-					if (F::exists($file)) {
-						return Response::file($file);
+					// Help directory must exist
+					if ($rootReal === false) {
+						return new Response('Not found', 'text/plain', 404);
 					}
 
-					return new Response('Not found', 'text/plain', 404);
+					$file = $root . '/' . $path;
+					$fileReal = realpath($file);
+
+					// File must exist and be within help directory
+					if ($fileReal === false || str_starts_with($fileReal, $rootReal) === false) {
+						return new Response('Not found', 'text/plain', 404);
+					}
+
+					return Response::file($fileReal);
 				}
 			]
 		]
 	],
 	'areas' => [
-		'help' => function ($kirby) {
-			$root = $kirby->option('medienbaecker.help-view.root') ?? $kirby->root('site') . '/help';
+		'help' => function (): array {
+			$root = Help::root();
 
 			// Don't show menu item if help folder doesn't exist
 			if (Dir::exists($root) === false) {
@@ -85,8 +74,8 @@ Kirby::plugin('medienbaecker/help-view', [
 				'views' => [
 					[
 						'pattern' => 'help',
-						'action'  => function () use ($root) {
-							$articles = Help::articles($root);
+						'action'  => function (): array {
+							$articles = Help::articles(Help::root());
 
 							return [
 								'component' => 'k-help-view',
@@ -100,7 +89,8 @@ Kirby::plugin('medienbaecker/help-view', [
 					],
 					[
 						'pattern' => 'help/(:all)',
-						'action'  => function ($slug) use ($root) {
+						'action'  => function (string $slug): array {
+							$root = Help::root();
 							$articles = Help::articles($root);
 							$result   = Help::find($articles, $slug);
 							$current  = $result['article'];
