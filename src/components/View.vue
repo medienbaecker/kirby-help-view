@@ -95,7 +95,26 @@ export default {
 </script>
 
 <style>
-.k-help-view .k-text > p {
-	max-width: 80ch;
+.k-help-view .k-text {
+	width: 100%;
+
+	>p {
+		max-inline-size: 80ch;
+	}
+
+	>figure {
+		max-inline-size: 100%;
+
+		video {
+			max-inline-size: 100%;
+			border-radius: var(--rounded);
+		}
+
+		figcaption {
+			font-size: var(--text-xs);
+			color: var(--color-text-dimmed);
+			margin-block-start: var(--spacing-2);
+		}
+	}
 }
 </style>

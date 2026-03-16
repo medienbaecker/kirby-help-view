@@ -8,6 +8,8 @@ use Kirby\Http\Response;
 use Kirby\Toolkit\A;
 use Medienbaecker\HelpView\Help;
 
+require __DIR__ . '/lib/HelpFile.php';
+require __DIR__ . '/lib/HelpPage.php';
 require __DIR__ . '/lib/Help.php';
 
 Kirby::plugin('medienbaecker/help-view', [
@@ -33,7 +35,7 @@ Kirby::plugin('medienbaecker/help-view', [
 	'api' => [
 		'routes' => [
 			[
-				'pattern' => 'help/image/(:all)',
+				'pattern' => 'help/file/(:all)',
 				'auth'    => false,
 				'action'  => function (string $path): Response {
 					$root = Help::root();

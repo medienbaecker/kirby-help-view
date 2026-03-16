@@ -110,14 +110,15 @@ class Help
 
 		$relativePath = ltrim(str_replace($root, '', $folder), '/');
 
-		$text = $content->text()->or('')->value();
-		$text = preg_replace_callback(
-			'/(?<!`)\(image:\s*([^)\s]+)/',
-			fn(array $m): string => '(image: /api/help/image/' . $relativePath . '/' . $m[1],
-			$text
-		);
+		$page = new HelpPage([
+			'slug'     => $slug,
+			'root'     => $folder,
+			'content'  => ['title' => $title],
+			'helpPath' => $relativePath,
+		]);
 
-		$html = self::kirbytext($text);
+		$text = $content->text()->or('')->value();
+		$html = self::kirbytext($text, $page);
 
 		return [
 			'slug'    => $slug,
@@ -132,7 +133,7 @@ class Help
 	/**
 	 * Process kirbytext while protecting code blocks
 	 */
-	private static function kirbytext(string $text): string
+	private static function kirbytext(string $text, HelpPage $parent): string
 	{
 		$codeBlocks = [];
 		$placeholder = '⌘HELP_CODE_' . bin2hex(random_bytes(8)) . '_';
@@ -154,7 +155,13 @@ class Help
 			$text
 		);
 
-		$html = kirbytext($text);
+		$kirby = kirby();
+		$html = $kirby->kirbytags($text, ['parent' => $parent]);
+		// Strip leading whitespace from HTML lines to prevent
+		// Parsedown from treating indented KirbyTag output as code blocks
+		$html = preg_replace('/^[\t ]+(<[a-zA-Z\/!])/m', '$1', $html);
+		$html = $kirby->markdown($html);
+		$html = $kirby->smartypants($html);
 
 		// Restore code blocks as HTML
 		return preg_replace_callback(
