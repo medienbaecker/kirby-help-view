@@ -38,6 +38,10 @@ Kirby::plugin('medienbaecker/help-view', [
 				'pattern' => 'help/file/(:all)',
 				'auth'    => false,
 				'action'  => function (string $path): Response {
+					if (!kirby()->user()) {
+						return new Response('Unauthorized', 'text/plain', 401);
+					}
+
 					$root = Help::root();
 					$rootReal = realpath($root);
 
