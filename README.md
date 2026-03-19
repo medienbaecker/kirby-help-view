@@ -94,7 +94,6 @@ return [
 
 ## Notes
 
-- Files in articles (images, videos, etc.) are served via an API route _without_ authentication. This means help files are technically accessible without Panel login if someone guesses the URL. For most use cases this is fine since help content isn't sensitive but be aware of this if you include confidential information in help files. If you have a better idea how to handle this, please let me know.
 - The help menu item only appears if the `site/help` folder exists.
 
 ## Requirements
