@@ -1,17 +1,16 @@
 {
-	"name": "medienbaecker/kirby-help-view",
-	"description": "Display help articles directly in the Kirby Panel",
-	"type": "kirby-plugin",
-	"license": "MIT",
-	"version": "1.2.0",
-	"authors": [
-		{
-			"name": "Thomas Günther",
-			"email": "mail@medienbaecker.com"
-		}
-	],
-	"require": {
-		"getkirby/cms": "^5.0",
-		"getkirby/composer-installer": "^1.2"
-	}
+  "name": "medienbaecker/kirby-help-view",
+  "description": "Display help articles directly in the Kirby Panel",
+  "type": "kirby-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Günther",
+      "email": "mail@medienbaecker.com"
+    }
+  ],
+  "require": {
+    "getkirby/cms": "^5.0",
+    "getkirby/composer-installer": "^1.2"
+  }
 }
