@@ -6,6 +6,7 @@ use Kirby\Content\Content;
 use Kirby\Data\Txt;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
+use Kirby\Toolkit\Html;
 use Kirby\Toolkit\Str;
 
 class Help
@@ -131,25 +132,48 @@ class Help
 	}
 
 	/**
-	 * Process kirbytext while protecting code blocks
+	 * Process kirbytext while protecting code blocks and Panel elements
+	 * (<k-button>, <k-icon>) from markdown
 	 */
 	private static function kirbytext(string $text, HelpPage $parent): string
 	{
-		$codeBlocks = [];
-		$placeholder = '⌘HELP_CODE_' . bin2hex(random_bytes(8)) . '_';
+		$protected = [];
+		$placeholder = '⌘HELP_PROTECTED_' . bin2hex(random_bytes(8)) . '_';
 
 		// Protect code blocks from KirbyTag parsing
 		$text = preg_replace_callback(
 			'/```(\w*)\n([\s\S]*?)```|`([^`\n]+)`/',
-			function (array $m) use (&$codeBlocks, $placeholder): string {
-				$index = count($codeBlocks);
+			function (array $m) use (&$protected, $placeholder): string {
+				$index = count($protected);
 				if (isset($m[3])) {
 					// Inline code
-					$codeBlocks[$index] = ['type' => 'inline', 'code' => $m[3]];
+					$protected[$index] = ['type' => 'inline', 'code' => $m[3]];
 				} else {
 					// Fenced code block
-					$codeBlocks[$index] = ['type' => 'fenced', 'lang' => $m[1], 'code' => $m[2]];
+					$protected[$index] = ['type' => 'fenced', 'lang' => $m[1], 'code' => $m[2]];
 				}
+				return $placeholder . $index . '⌘';
+			},
+			$text
+		);
+
+		// Protect <k-button> elements (scoped to help articles, no global tag)
+		$text = preg_replace_callback(
+			'/<k-button(?![\w-])([^>]*)>(.*?)<\/k-button>/is',
+			function (array $m) use (&$protected, $placeholder): string {
+				$index = count($protected);
+				$protected[$index] = ['type' => 'button', 'attrs' => $m[1], 'label' => $m[2]];
+				return $placeholder . $index . '⌘';
+			},
+			$text
+		);
+
+		// Protect <k-icon> elements
+		$text = preg_replace_callback(
+			'/<k-icon(?![\w-])([^>]*?)\s*\/?>/i',
+			function (array $m) use (&$protected, $placeholder): string {
+				$index = count($protected);
+				$protected[$index] = ['type' => 'icon', 'attrs' => $m[1]];
 				return $placeholder . $index . '⌘';
 			},
 			$text
@@ -157,28 +181,142 @@ class Help
 
 		$kirby = kirby();
 		$html = $kirby->kirbytags($text, ['parent' => $parent]);
-		// Strip leading whitespace from HTML lines to prevent
-		// Parsedown from treating indented KirbyTag output as code blocks
-		$html = preg_replace('/^[\t ]+(<[a-zA-Z\/!])/m', '$1', $html);
+		// Strip leading whitespace from KirbyTag output and protected
+		// placeholders so Parsedown doesn't treat indented lines as code blocks
+		$html = preg_replace('/^[\t ]+(<[a-zA-Z\/!]|⌘)/m', '$1', $html);
 		$html = $kirby->markdown($html);
 		$html = $kirby->smartypants($html);
 
-		// Restore code blocks as HTML
+		// Restore protected spans as HTML
 		return preg_replace_callback(
 			'/<p>' . preg_quote($placeholder, '/') . '(\d+)⌘<\/p>|' . preg_quote($placeholder, '/') . '(\d+)⌘/',
-			function (array $m) use ($codeBlocks): string {
-				$index = (int)($m[1] !== '' ? $m[1] : $m[2]);
-				$block = $codeBlocks[$index];
+			function (array $m) use ($protected): string {
+				$wrappedInP = $m[1] !== '';
+				$block = $protected[(int)($wrappedInP ? $m[1] : $m[2])];
 
-				if ($block['type'] === 'inline') {
-					return '<code>' . esc($block['code']) . '</code>';
-				}
+				$rendered = match ($block['type']) {
+					'inline' => '<code>' . esc($block['code']) . '</code>',
+					'button' => self::panelButton($block['attrs'], $block['label']),
+					'icon'   => self::panelIcon($block['attrs']),
+					'fenced' => '<pre><code' . ($block['lang'] ? ' class="language-' . esc($block['lang']) . '"' : '') . '>' . esc(trim($block['code'])) . '</code></pre>',
+				};
 
-				$langAttr = $block['lang'] ? ' class="language-' . esc($block['lang']) . '"' : '';
-				return '<pre><code' . $langAttr . '>' . esc(trim($block['code'])) . '</code></pre>';
+				// Markdown wraps every lone placeholder in its own <p>. Keep that
+				// <p> only around text-level output (inline code → <code>,
+				// buttons → <span>/<a>), exactly as Kirby's markdown does; <pre>
+				// and <svg> are block-level, so leave them bare.
+				$textLevel = in_array($block['type'], ['inline', 'button'], true);
+				return $wrappedInP && $textLevel ? '<p>' . $rendered . '</p>' : $rendered;
 			},
 			$html
 		);
+	}
+
+	/**
+	 * Allow only safe link targets. Returns the URL if it's relative or uses a
+	 * safe scheme (http, https, mailto, tel), otherwise null — blocks
+	 * javascript:, data:, vbscript: etc. (incl. whitespace/case obfuscation),
+	 * since the output is injected into the Panel via v-html.
+	 */
+	private static function safeUrl(?string $url): ?string
+	{
+		if ($url === null || $url === '') {
+			return null;
+		}
+
+		// Browsers ignore leading/embedded whitespace and control characters
+		// when resolving the scheme, so strip them before validating.
+		$bare = preg_replace('/[\x00-\x20]+/', '', $url);
+
+		// A scheme is present but not on the allowlist → reject.
+		// No scheme → relative/root-relative URL → allow.
+		if (
+			preg_match('/^[a-z][a-z0-9+.\-]*:/i', $bare) &&
+			!preg_match('/^(https?|mailto|tel):/i', $bare)
+		) {
+			return null;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Extract a double-quoted attribute value from a raw attribute string
+	 */
+	private static function attr(string $attrs, string $name): ?string
+	{
+		if (preg_match('/\b' . preg_quote($name, '/') . '\s*=\s*"([^"]*)"/i', $attrs, $m)) {
+			return $m[1];
+		}
+		return null;
+	}
+
+	/**
+	 * Render an icon from Kirby's own Panel icon sprite. A non-empty $alt makes
+	 * it meaningful (role="img" + label); without it the icon is decorative.
+	 */
+	private static function icon(string $name, string $class = '', ?string $alt = null): string
+	{
+		$a11y = $alt
+			? 'role="img" aria-label="' . esc($alt) . '"'
+			: 'aria-hidden="true"';
+
+		return '<svg ' . $a11y . ' class="' . trim('k-icon ' . $class) . '"><use xlink:href="#icon-' . esc($name) . '"></use></svg>';
+	}
+
+	/**
+	 * Render an inline Panel icon. Add `alt` when the icon carries meaning on
+	 * its own; otherwise it stays decorative (hidden from screen readers).
+	 */
+	private static function panelIcon(string $attrs): string
+	{
+		$name = self::attr($attrs, 'name');
+
+		return $name ? self::icon($name, 'k-help-icon', self::attr($attrs, 'alt')) : '';
+	}
+
+	/**
+	 * Render a replica of a Panel button using Kirby's own .k-button markup,
+	 * so the Panel's existing CSS + icon sprite style it. A `link` makes it an
+	 * interactive <a>, otherwise it's a static <span> representation.
+	 */
+	private static function panelButton(string $attrs, string $label): string
+	{
+		$icon = self::attr($attrs, 'icon');
+		$link = self::safeUrl(self::attr($attrs, 'link'));
+		$text = trim($label);
+
+		// Nothing to show
+		if (!$icon && $text === '') {
+			return '';
+		}
+
+		$external = $link !== null && preg_match('#^\s*https?://#i', $link) === 1;
+
+		$attr = [
+			'class'         => 'k-button k-help-button',
+			'data-has-icon' => $icon ? 'true' : null,
+			'data-has-text' => $text !== '' ? 'true' : null,
+			'data-theme'    => self::attr($attrs, 'theme'),
+			'data-variant'  => self::attr($attrs, 'variant') ?: 'filled',
+			'data-size'     => self::attr($attrs, 'size'),
+			'href'          => $link,
+			'target'        => $external ? '_blank' : null,
+			'rel'           => $external ? 'noreferrer noopener' : null,
+		];
+
+		$content = [];
+		if ($icon) {
+			// With visible text the icon is decorative; for an icon-only button
+			// it carries the accessible name via `title` (as k-button does).
+			$iconAlt = $text === '' ? self::attr($attrs, 'title') : null;
+			$content[] = '<span class="k-button-icon">' . self::icon($icon, '', $iconAlt) . '</span>';
+		}
+		if ($text !== '') {
+			$content[] = Html::tag('span', $text, ['class' => 'k-button-text']);
+		}
+
+		return Html::tag($link ? 'a' : 'span', $content, $attr);
 	}
 
 	private static function slug(string $name): string

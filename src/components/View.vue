@@ -116,5 +116,17 @@ export default {
 			margin-block-start: var(--spacing-2);
 		}
 	}
+
+	.k-help-button {
+		text-decoration: none;
+		color: inherit;
+		margin-block: var(--spacing-1);
+		margin-inline-end: var(--spacing-1);
+	}
+
+	.k-help-icon {
+		display: inline-block;
+		vertical-align: text-bottom;
+	}
 }
 </style>

@@ -7,6 +7,7 @@ A [Kirby](https://getkirby.com/) plugin that adds a help view to the Panel for y
 - Custom Panel area with help articles
 - Supports categories with nested articles
 - KirbyText in articles (links, images, formatting)
+- Render real Panel buttons and icons inside articles
 - Icons and colors for each article card
 - Previous/next navigation between articles
 - Breadcrumbs for nested articles
@@ -69,7 +70,7 @@ Your help content here with **KirbyText** support.
 (image: screenshot.png)
 ```
 
-You can define an icon from Kirby's [icon set](https://getkirby.com/docs/reference/panel/icons) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
+You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
 ### Example category
 
@@ -80,6 +81,42 @@ Title: Editing Content
 ```
 
 If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_editing" → "Editing"). If you're not having to deal with German Ümläuts (or other fancy characters) in your folder names, don't worry about it.
+
+## Panel buttons and icons
+
+To make your documentation match what clients actually see, you can drop `<k-button>` and `<k-icon>` straight into your articles. They render as the real Panel buttons and icons, reusing Kirby's own styles and icon set, so they always look like the real thing.
+
+### Buttons
+
+```html
+<k-button icon="check" theme="positive">Save</k-button>
+```
+
+Because they render as Kirby's own buttons, the [Kirby Lab](https://lab.getkirby.com) is the live, visual reference for the icons, themes, variants and sizes you can use. All attributes are optional:
+
+- `icon` – any icon name from the [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset)
+- `theme` – a button [theme](https://lab.getkirby.com/public/lab/components/buttons/2_themes) like `positive`, `negative`, `info` or `notice`. For page status buttons use the `-icon` variants: `negative-icon` (draft), `info-icon` (unlisted), `positive-icon` (listed).
+- `variant` – [`filled`](https://lab.getkirby.com/public/lab/components/buttons/1_variants) (default) or `dimmed`
+- `size` – [`xs`, `sm`, `md`, `lg`](https://lab.getkirby.com/public/lab/components/buttons/3_sizes) (default `md`)
+- `link` – turns the button into a link. Relative URLs (e.g. `/panel/site`), `mailto:`, `tel:` and external links are allowed; external links open in a new tab.
+- `title` – accessible label for an icon-only button, e.g. `<k-button icon="add" title="Add"></k-button>` (matches Kirby's `k-button`; not needed when there's visible text)
+
+Ideally put buttons on their own line. Avoid placing one in the middle of a sentence – a button is taller than your text and will disrupt the line height.
+
+```html
+<k-button icon="add">Add</k-button>
+<k-button icon="trash" theme="negative">Delete</k-button>
+```
+
+### Icons
+
+Icons are inline and decorative by default (`aria-hidden`). When an icon carries meaning, add `alt` so screen readers announce it:
+
+```html
+Click the <k-icon name="add" alt="Add" /> button to add a block.
+```
+
+Use any name from the [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset).
 
 ## Options
 
@@ -95,6 +132,7 @@ return [
 ## Notes
 
 - The help menu item only appears if the `site/help` folder exists.
+- Help articles are trusted content (like your templates) – any HTML in them is rendered as-is.
 
 ## Requirements
 
