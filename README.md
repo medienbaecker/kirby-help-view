@@ -98,7 +98,8 @@ Because they render as Kirby's own buttons, the [Kirby Lab](https://lab.getkirby
 - `theme` – a button [theme](https://lab.getkirby.com/public/lab/components/buttons/2_themes) like `positive`, `negative`, `info` or `notice`. For page status buttons use the `-icon` variants: `negative-icon` (draft), `info-icon` (unlisted), `positive-icon` (listed).
 - `variant` – [`filled`](https://lab.getkirby.com/public/lab/components/buttons/1_variants) (default) or `dimmed`
 - `size` – [`xs`, `sm`, `md`, `lg`](https://lab.getkirby.com/public/lab/components/buttons/3_sizes) (default `md`)
-- `link` – turns the button into a link. Relative URLs (e.g. `/panel/site`), `mailto:`, `tel:` and external links are allowed; external links open in a new tab.
+- `link` – turns the button into a link. Reference a file in the article's folder by name (e.g. `link="template.zip"`), just like the `(image:)` and `(file:)` tags. Relative URLs (e.g. `/panel/site`), `mailto:`, `tel:` and external links also work; external links open in a new tab.
+- `download` – on a button that links to a file, saves it under its original filename instead of opening it in the browser
 - `title` – accessible label for an icon-only button, e.g. `<k-button icon="add" title="Add"></k-button>` (matches Kirby's `k-button`; not needed when there's visible text)
 
 Ideally put buttons on their own line. Avoid placing one in the middle of a sentence – a button is taller than your text and will disrupt the line height.
