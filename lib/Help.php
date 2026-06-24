@@ -190,13 +190,13 @@ class Help
 		// Restore protected spans as HTML
 		return preg_replace_callback(
 			'/<p>' . preg_quote($placeholder, '/') . '(\d+)⌘<\/p>|' . preg_quote($placeholder, '/') . '(\d+)⌘/',
-			function (array $m) use ($protected): string {
+			function (array $m) use ($protected, $parent): string {
 				$wrappedInP = $m[1] !== '';
 				$block = $protected[(int)($wrappedInP ? $m[1] : $m[2])];
 
 				$rendered = match ($block['type']) {
 					'inline' => '<code>' . esc($block['code']) . '</code>',
-					'button' => self::panelButton($block['attrs'], $block['label']),
+					'button' => self::panelButton($block['attrs'], $block['label'], $parent),
 					'icon'   => self::panelIcon($block['attrs']),
 					'fenced' => '<pre><code' . ($block['lang'] ? ' class="language-' . esc($block['lang']) . '"' : '') . '>' . esc(trim($block['code'])) . '</code></pre>',
 				};
@@ -280,11 +280,19 @@ class Help
 	 * so the Panel's existing CSS + icon sprite style it. A `link` makes it an
 	 * interactive <a>, otherwise it's a static <span> representation.
 	 */
-	private static function panelButton(string $attrs, string $label): string
+	private static function panelButton(string $attrs, string $label, HelpPage $parent): string
 	{
 		$icon = self::attr($attrs, 'icon');
-		$link = self::safeUrl(self::attr($attrs, 'link'));
 		$text = trim($label);
+
+		// A link naming a file in the article folder resolves to that file's URL
+		$rawLink = self::attr($attrs, 'link');
+		$file    = $rawLink ? $parent->file($rawLink) : null;
+		$link    = self::safeUrl($file?->url() ?? $rawLink);
+
+		// a bare `download` (no value) saves the linked file under its own name
+		$flags    = preg_replace('/\S+="[^"]*"/', '', $attrs);
+		$download = preg_match('/\bdownload\b/i', $flags) ? $file?->filename() : null;
 
 		// Nothing to show
 		if (!$icon && $text === '') {
@@ -301,6 +309,7 @@ class Help
 			'data-variant'  => self::attr($attrs, 'variant') ?: 'filled',
 			'data-size'     => self::attr($attrs, 'size'),
 			'href'          => $link,
+			'download'      => $download,
 			'target'        => $external ? '_blank' : null,
 			'rel'           => $external ? 'noreferrer noopener' : null,
 		];
