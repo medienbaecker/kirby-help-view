@@ -133,7 +133,7 @@ class Help
 
 	/**
 	 * Process kirbytext while protecting code blocks and Panel elements
-	 * (<k-button>, <k-icon>) from markdown
+	 * (<k-box>, <k-button>, <k-icon>) from markdown
 	 */
 	private static function kirbytext(string $text, HelpPage $parent): string
 	{
@@ -147,11 +147,28 @@ class Help
 				$index = count($protected);
 				if (isset($m[3])) {
 					// Inline code
-					$protected[$index] = ['type' => 'inline', 'code' => $m[3]];
+					$protected[$index] = ['type' => 'inline', 'code' => $m[3], 'raw' => $m[0]];
 				} else {
 					// Fenced code block
-					$protected[$index] = ['type' => 'fenced', 'lang' => $m[1], 'code' => $m[2]];
+					$protected[$index] = ['type' => 'fenced', 'lang' => $m[1], 'code' => $m[2], 'raw' => $m[0]];
 				}
+				return $placeholder . $index . '⌘';
+			},
+			$text
+		);
+
+		// Protect <k-box> elements. Their content is KirbyText of its own, so
+		// put back the code it contains and let the recursive call protect it.
+		$text = preg_replace_callback(
+			'/<k-box(?![\w-])([^>]*)>(.*?)<\/k-box>/is',
+			function (array $m) use (&$protected, $placeholder): string {
+				$content = preg_replace_callback(
+					'/' . preg_quote($placeholder, '/') . '(\d+)⌘/',
+					fn (array $p): string => $protected[(int)$p[1]]['raw'],
+					$m[2]
+				);
+				$index = count($protected);
+				$protected[$index] = ['type' => 'box', 'attrs' => $m[1], 'content' => $content];
 				return $placeholder . $index . '⌘';
 			},
 			$text
@@ -198,6 +215,7 @@ class Help
 					'inline' => '<code>' . esc($block['code']) . '</code>',
 					'button' => self::panelButton($block['attrs'], $block['label'], $parent),
 					'icon'   => self::panelIcon($block['attrs']),
+					'box'    => self::panelBox($block['attrs'], $block['content'], $parent),
 					'fenced' => '<pre><code' . ($block['lang'] ? ' class="language-' . esc($block['lang']) . '"' : '') . '>' . esc(trim($block['code'])) . '</code></pre>',
 				};
 
@@ -273,6 +291,28 @@ class Help
 		$name = self::attr($attrs, 'name');
 
 		return $name ? self::icon($name, 'k-help-icon', self::attr($attrs, 'alt')) : '';
+	}
+
+	/**
+	 * Render a replica of a Panel box (like the info field) using Kirby's own
+	 * .k-box markup. The content is rendered as KirbyText.
+	 */
+	private static function panelBox(string $attrs, string $content, HelpPage $parent): string
+	{
+		// Indented content would otherwise turn into a markdown code block
+		preg_match_all('/^[\t ]*(?=\S)/m', $content, $indents);
+		$indent  = min(array_map('strlen', $indents[0]) ?: [0]);
+		$content = preg_replace('/^[\t ]{0,' . $indent . '}/m', '', $content);
+
+		$icon = self::attr($attrs, 'icon');
+
+		$html  = $icon ? self::icon($icon) : '';
+		$html .= '<div class="k-text">' . self::kirbytext(trim($content), $parent) . '</div>';
+
+		return Html::tag('div', [$html], [
+			'class'      => 'k-box',
+			'data-theme' => self::attr($attrs, 'theme'),
+		]);
 	}
 
 	/**

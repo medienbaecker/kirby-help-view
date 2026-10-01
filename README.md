@@ -7,7 +7,7 @@ A [Kirby](https://getkirby.com/) plugin that adds a help view to the Panel for y
 - Custom Panel area with help articles
 - Supports categories with nested articles
 - KirbyText in articles (links, images, formatting)
-- Render real Panel buttons and icons inside articles
+- Render real Panel buttons, boxes and icons inside articles
 - Icons and colors for each article card
 - Previous/next navigation between articles
 - Breadcrumbs for nested articles
@@ -82,9 +82,9 @@ Title: Editing Content
 
 If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_editing" → "Editing"). If you're not having to deal with German Ümläuts (or other fancy characters) in your folder names, don't worry about it.
 
-## Panel buttons and icons
+## Panel buttons, boxes and icons
 
-To make your documentation match what clients actually see, you can drop `<k-button>` and `<k-icon>` straight into your articles. They render as the real Panel buttons and icons, reusing Kirby's own styles and icon set, so they always look like the real thing.
+To make your documentation match what clients actually see, you can drop `<k-button>`, `<k-box>` and `<k-icon>` straight into your articles. They render as the real Panel buttons, boxes and icons, reusing Kirby's own styles and icon set, so they always look like the real thing.
 
 ### Buttons
 
@@ -108,6 +108,23 @@ Ideally put buttons on their own line. Avoid placing one in the middle of a sent
 <k-button icon="add">Add</k-button>
 <k-button icon="trash" theme="negative">Delete</k-button>
 ```
+
+### Boxes
+
+Boxes look like Kirby's info field and are handy for tips, warnings and other callouts. Their content is KirbyText, so formatting, links, images and buttons work inside.
+
+```html
+<k-box icon="alert" theme="warning">
+  Here's some **important** information.
+</k-box>
+```
+
+Both attributes are optional:
+
+- `icon` – any icon name from the [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset)
+- `theme` – a box [theme](https://lab.getkirby.com/public/lab/components/boxes/1_themes) like `info`, `positive`, `negative`, `notice` or `warning`. Without a theme the box has no background, just like Kirby's `k-box`.
+
+Put boxes on their own lines with an empty line before and after. Boxes can't be nested. Like Kirby's info field, they are made for a sentence or two: longer content with headings or lists is better placed outside the box.
 
 ### Icons
 
