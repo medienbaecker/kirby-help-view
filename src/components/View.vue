@@ -163,5 +163,11 @@ export default {
 	.k-help-icon-label {
 		white-space: nowrap;
 	}
+
+	.k-box[data-theme] {
+		--code-inline-color-back: var(--theme-color-300);
+		--code-inline-color-border: var(--theme-color-500);
+		--code-inline-color-text: var(--theme-color-900);
+	}
 }
 </style>
