@@ -2,7 +2,7 @@
   "name": "medienbaecker/kirby-help-view",
   "description": "Display help articles directly in the Kirby Panel",
   "type": "kirby-plugin",
-  "version": "1.4.0",
+  "version": "6.0.0-rc.1",
   "license": "MIT",
   "authors": [
     {
@@ -11,7 +11,8 @@
     }
   ],
   "require": {
-    "getkirby/cms": "^5.0",
+    "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
+    "getkirby/cms": "^6.0",
     "getkirby/composer-installer": "^1.2"
   }
 }

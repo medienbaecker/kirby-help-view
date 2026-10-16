@@ -154,7 +154,7 @@ return [
 
 ## Requirements
 
-Kirby 5.2.0 or higher (I'm using the new `Str::label()` method)
+Kirby 6. For Kirby 5, use version 1.
 
 ## Installation
 
