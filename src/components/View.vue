@@ -162,6 +162,7 @@ export default {
 	.k-help-icon {
 		display: inline-block;
 		vertical-align: text-bottom;
+		color: currentColor;
 	}
 
 	.k-help-icon-label {
