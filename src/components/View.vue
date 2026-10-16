@@ -151,6 +151,10 @@ export default {
 		}
 	}
 
+	.k-help-button[data-inline]:not([data-has-text]) .k-button-icon .k-icon {
+		margin-inline-end: 0;
+	}
+
 	span.k-help-button[data-inline] {
 		cursor: default;
 	}
