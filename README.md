@@ -102,11 +102,17 @@ Because they render as Kirby's own buttons, the [Kirby Lab](https://lab.getkirby
 - `download` – on a button that links to a file, saves it under its original filename instead of opening it in the browser
 - `title` – accessible label for an icon-only button, e.g. `<k-button icon="add" title="Add"></k-button>` (matches Kirby's `k-button`; not needed when there's visible text)
 
-Ideally put buttons on their own line. Avoid placing one in the middle of a sentence – a button is taller than your text and will disrupt the line height.
+A button on its own line renders at full size:
 
 ```html
 <k-button icon="add">Add</k-button>
 <k-button icon="trash" theme="negative">Delete</k-button>
+```
+
+Inside a sentence, a button shrinks to the text: it sits on the baseline, keeps the line height and never breaks between its icon and label. That makes it the way to name a Panel button in running text:
+
+```html
+Your edits go live when you click <k-button icon="check" theme="notice">Save</k-button>.
 ```
 
 ### Boxes

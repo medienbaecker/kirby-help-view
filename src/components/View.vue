@@ -124,6 +124,37 @@ export default {
 		margin-inline-end: var(--spacing-1);
 	}
 
+	.k-help-button[data-inline] {
+		display: inline;
+		height: auto;
+		margin: 0;
+		padding: 0.15em 0.4em;
+		line-height: inherit;
+		white-space: nowrap;
+		border-radius: var(--rounded-sm);
+
+		.k-button-icon {
+			display: inline;
+		}
+
+		.k-button-icon .k-icon {
+			display: inline-block;
+			width: 1em;
+			height: 1em;
+			margin-inline-end: 0.3em;
+			vertical-align: -0.15em;
+		}
+
+		.k-button-text {
+			display: inline;
+			padding: 0;
+		}
+	}
+
+	span.k-help-button[data-inline] {
+		cursor: default;
+	}
+
 	.k-help-icon {
 		display: inline-block;
 		vertical-align: text-bottom;

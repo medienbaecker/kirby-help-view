@@ -215,7 +215,7 @@ class Help
 
 				$rendered = match ($block['type']) {
 					'inline' => '<code>' . esc($block['code']) . '</code>',
-					'button' => self::panelButton($block['attrs'], $block['label'], $parent),
+					'button' => self::panelButton($block['attrs'], $block['label'], $parent, !$wrappedInP),
 					'icon'   => self::panelIcon($block['attrs']),
 					'box'    => self::panelBox($block['attrs'], $block['content'], $parent),
 					'fenced' => '<pre><code' . ($block['lang'] ? ' class="language-' . esc($block['lang']) . '"' : '') . '>' . esc(trim($block['code'])) . '</code></pre>',
@@ -322,7 +322,7 @@ class Help
 	 * so the Panel's existing CSS + icon sprite style it. A `link` makes it an
 	 * interactive <a>, otherwise it's a static <span> representation.
 	 */
-	private static function panelButton(string $attrs, string $label, HelpPage $parent): string
+	private static function panelButton(string $attrs, string $label, HelpPage $parent, bool $inline = false): string
 	{
 		$icon = self::attr($attrs, 'icon');
 		$text = trim($label);
@@ -350,6 +350,7 @@ class Help
 			'data-theme'    => self::attr($attrs, 'theme'),
 			'data-variant'  => self::attr($attrs, 'variant') ?: 'filled',
 			'data-size'     => self::attr($attrs, 'size'),
+			'data-inline'   => $inline ? 'true' : null,
 			'href'          => $link,
 			'download'      => $download,
 			'target'        => $external ? '_blank' : null,
