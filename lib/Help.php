@@ -206,6 +206,14 @@ class Help
 		$html = $kirby->markdown($html);
 		$html = $kirby->smartypants($html);
 
+		$html = preg_replace_callback(
+			'/' . preg_quote($placeholder, '/') . '(\d+)⌘(\s*)(<(strong|em|b)>.*?<\/\4>|[^\s<]+)/u',
+			fn (array $m): string => $protected[(int)$m[1]]['type'] === 'icon'
+				? '<span class="k-help-icon-label">' . $placeholder . $m[1] . '⌘' . $m[2] . $m[3] . '</span>'
+				: $m[0],
+			$html
+		);
+
 		// Restore protected spans as HTML
 		return preg_replace_callback(
 			'/<p>' . preg_quote($placeholder, '/') . '(\d+)⌘<\/p>|' . preg_quote($placeholder, '/') . '(\d+)⌘/',

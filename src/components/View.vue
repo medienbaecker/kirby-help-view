@@ -159,5 +159,9 @@ export default {
 		display: inline-block;
 		vertical-align: text-bottom;
 	}
+
+	.k-help-icon-label {
+		white-space: nowrap;
+	}
 }
 </style>

@@ -140,6 +140,8 @@ Icons are inline and decorative by default (`aria-hidden`). When an icon carries
 Click the <k-icon name="add" alt="Add" /> button to add a block.
 ```
 
+An icon followed by a word or a bold label never ends up alone at the end of a line: the two always wrap together.
+
 Use any name from the [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset).
 
 ## Options
