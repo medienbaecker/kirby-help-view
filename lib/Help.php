@@ -6,7 +6,9 @@ use Kirby\Content\Content;
 use Kirby\Data\Txt;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
+use Kirby\Panel\Assets;
 use Kirby\Toolkit\Html;
+use Kirby\Toolkit\HtmlString;
 use Kirby\Toolkit\Str;
 
 class Help
@@ -124,7 +126,7 @@ class Help
 		return [
 			'slug'    => $slug,
 			'title'   => $title,
-			'content' => $html,
+			'content' => new HtmlString($html),
 			'icon'    => $content->icon()->or('question')->value(),
 			'color'   => $content->color()->or('')->value(),
 			'back'    => $content->back()->or('')->value()
@@ -279,7 +281,7 @@ class Help
 			? 'role="img" aria-label="' . esc($alt) . '"'
 			: 'aria-hidden="true"';
 
-		return '<svg ' . $a11y . ' class="' . trim('k-icon ' . $class) . '"><use xlink:href="#icon-' . esc($name) . '"></use></svg>';
+		return '<svg ' . $a11y . ' class="' . trim('k-icon ' . $class) . '"><use href="' . (new Assets())->icons() . '#icon-' . esc($name) . '"></use></svg>';
 	}
 
 	/**

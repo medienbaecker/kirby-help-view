@@ -8,7 +8,7 @@
 
 		<template v-if="current">
 			<k-box theme="text">
-				<k-text :html="current.content" />
+				<k-text :text="current.content" />
 			</k-box>
 		</template>
 
