@@ -27,9 +27,9 @@ site/help/
 │   ├── article.txt
 │   ├── article.de.txt
 │   └── article.ja.txt
-├── 2_editing/
+├── 2_content/
 │   ├── category.txt
-│   ├── 1_text/article.txt
+│   ├── 1_formatting/article.txt
 │   └── 2_images/article.txt
 └── 3_settings/article.txt
 ```
@@ -44,50 +44,52 @@ Seems familiar, doesn't it? I tried to keep it close to Kirby's content structur
 ### Example article
 
 ```yaml
-# site/help/1_getting-started/article.txt
+# site/help/2_content/1_formatting/article.txt
 
-Title: Getting Started
-
-----
-
-Icon: book
+Title: Formatting for every reader
 
 ----
 
-Color: blue-600
+Icon: paragraph
 
 ----
 
-Back: blue-200
+Color: purple-700
+
+----
+
+Back: purple-200
 
 ----
 
 Text:
 
-## Welcome
+People read this website on phones and large screens, with screen readers, translation tools or enlarged text. Many of them rely on the structure of a text, not on how it looks.
 
-Your help content here with **KirbyText** support.
+## Every screen is different
 
-(image: screenshot.png)
+The website rearranges text and images to fit each screen. On a phone, lines break in other places, and an image may sit below the text instead of next to it.
+
+(image: reflow.svg alt: The same text on a large screen and on a phone width: 640)
 ```
 
-<img width="1280" height="800" alt="An article, half in the light and half in the dark Panel theme" src=".github/hero.png" />
+<img width="1280" height="800" alt="The example article, half in the light and half in the dark Panel theme" src=".github/hero.png" />
 
-You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
+You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from Kirby's [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
 ### Example category
 
 ```yaml
-# site/help/2_editing/category.txt
+# site/help/2_content/category.txt
 
-Title: Editing Content
+Title: Content
 ```
 
-If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_editing" → "Editing"). If you're not having to deal with German Ümläuts (or other fancy characters) in your folder names, don't worry about it.
+If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_content" → "Content"). If you're not having to deal with German Ümläuts (or other fancy characters) in your folder names, don't worry about it.
 
 ## Light and dark theme
 
-SVG images follow the Panel theme when you colour them with its [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
+SVG images follow the Panel theme when you color them with its [color variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
 
 ```svg
 <rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
