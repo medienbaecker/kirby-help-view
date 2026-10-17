@@ -7,6 +7,7 @@ use Kirby\Data\Txt;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use Kirby\Panel\Assets;
+use Kirby\Sane\Svg;
 use Kirby\Toolkit\Html;
 use Kirby\Toolkit\HtmlString;
 use Kirby\Toolkit\Str;
@@ -205,6 +206,7 @@ class Help
 		$html = preg_replace('/^[\t ]+(<[a-zA-Z\/!]|⌘)/m', '$1', $html);
 		$html = $kirby->markdown($html);
 		$html = $kirby->smartypants($html);
+		$html = self::inlineSvgs($html, $parent);
 
 		$html = preg_replace_callback(
 			'/' . preg_quote($placeholder, '/') . '(\d+)⌘(\s*)(<(strong|em|b)>.*?<\/\4>|[^\s<]+)/u',
@@ -235,6 +237,43 @@ class Help
 				// and <svg> are block-level, so leave them bare.
 				$textLevel = in_array($block['type'], ['inline', 'button'], true);
 				return $wrappedInP && $textLevel ? '<p>' . $rendered . '</p>' : $rendered;
+			},
+			$html
+		);
+	}
+
+	private static function inlineSvgs(string $html, HelpPage $parent): string
+	{
+		return preg_replace_callback(
+			'/<img\s[^>]*>/i',
+			function (array $m) use ($parent): string {
+				$src = self::attr($m[0], 'src');
+
+				if ($src === null || F::extension($src) !== 'svg') {
+					return $m[0];
+				}
+
+				$file = $parent->file(basename($src));
+
+				if ($file === null) {
+					return $m[0];
+				}
+
+				$alt   = self::attr($m[0], 'alt');
+				$width = self::attr($m[0], 'width');
+				$a11y  = $alt
+					? 'role="img" aria-label="' . esc($alt) . '"'
+					: 'aria-hidden="true"';
+				$style = $width ? ' style="max-inline-size: ' . (int)$width . 'px"' : '';
+
+				$svg = Svg::sanitize(F::read($file->root()));
+
+				return preg_replace_callback(
+					'/<svg\b[^>]*>/',
+					fn (array $tag): string => '<svg class="k-help-svg" ' . $a11y . $style . preg_replace('/\s(width|height)="[^"]*"/', '', substr($tag[0], 4)),
+					$svg,
+					1
+				);
 			},
 			$html
 		);

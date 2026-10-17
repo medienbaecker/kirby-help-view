@@ -72,6 +72,8 @@ Your help content here with **KirbyText** support.
 
 You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
+SVG images are placed into the page as markup, so they can use the Panel's [color variables](https://lab.getkirby.com/public/lab/basics/design/colors) and follow its light or dark theme, for example `fill: var(--color-text)` or `fill: light-dark(var(--color-gray-200), var(--color-gray-800))`. Write the colours as inline `style` attributes: a `<style>` element would apply to the whole Panel. The `alt` of the image tag becomes the SVG's label for screen readers.
+
 ### Example category
 
 ```yaml

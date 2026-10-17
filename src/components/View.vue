@@ -159,6 +159,12 @@ export default {
 		cursor: default;
 	}
 
+	.k-help-svg {
+		display: block;
+		inline-size: 100%;
+		block-size: auto;
+	}
+
 	.k-help-icon {
 		display: inline-block;
 		vertical-align: text-bottom;
