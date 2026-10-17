@@ -95,7 +95,7 @@ SVG images follow the Panel theme when you color them with its [color variables]
 <rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
 ```
 
-<img width="704" height="243" alt="An SVG illustration, half in the light and half in the dark Panel theme" src=".github/illustration.png" />
+<img width="672" height="211" alt="An SVG illustration, half in the light and half in the dark Panel theme" src=".github/illustration.png" />
 
 Screenshots need a dark copy with `-dark` in its name:
 
@@ -106,7 +106,7 @@ Screenshots need a dark copy with `-dark` in its name:
 └── screenshot-dark.png   shown when the Panel is dark
 ```
 
-<img width="608" height="512" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" src=".github/screenshot.png" />
+<img width="544" height="448" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" src=".github/screenshot.png" />
 
 ## Panel buttons, boxes and icons
 
@@ -142,7 +142,7 @@ Your edits go live when you click <k-button icon="check" theme="notice">Save</k-
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/buttons-dark.png">
-  <img src=".github/buttons.png" alt="A full-size download button, and a Save button inside a sentence" width="769">
+  <img src=".github/buttons.png" alt="A full-size download button, and a Save button inside a sentence" width="737">
 </picture>
 
 ### Boxes
@@ -157,7 +157,7 @@ Boxes look like Kirby's info field and are handy for tips, warnings and other ca
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/box-dark.png">
-  <img src=".github/box.png" alt="A yellow warning box with an alert icon" width="976">
+  <img src=".github/box.png" alt="A yellow warning box with an alert icon" width="944">
 </picture>
 
 Both attributes are optional:
@@ -177,7 +177,7 @@ Click the <k-icon name="add" alt="Add" /> button to add a block.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/icon-dark.png">
-  <img src=".github/icon.png" alt="A sentence with an add icon in the middle" width="769">
+  <img src=".github/icon.png" alt="A sentence with an add icon in the middle" width="737">
 </picture>
 
 An icon followed by a word or a bold label never ends up alone at the end of a line: the two always wrap together.
