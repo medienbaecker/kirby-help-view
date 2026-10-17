@@ -1,13 +1,23 @@
 # Kirby Help View
 
-A [Kirby](https://getkirby.com/) plugin that puts help for your clients into the Panel, right where they edit.
+Help articles for your clients, right in the [Kirby](https://getkirby.com/) Panel.
 
-You write the articles as text files in your project, with KirbyText, categories and translations. They use the Panel's own buttons, boxes and icons, so the help looks like the screens it explains, in the light and the dark theme.
+<img width="1280" height="800" alt="The help overview with article cards, half in the light and half in the dark Panel theme" src=".github/overview.png" />
 
-![The help overview with article cards, half in the light and half in the dark Panel theme](.github/images/overview.png)
-![An article, half in the light and half in the dark Panel theme](.github/images/hero.png)
+Articles are text files with KirbyText, sorted into categories and translated like your content. They can use the Panel's own buttons, boxes and icons, so the help looks like the screens it explains.
 
-## Content Structure
+## Installation
+
+```bash
+composer require medienbaecker/kirby-help-view
+```
+
+> [!TIP]
+> You can also download this repository and copy it to `site/plugins/kirby-help-view`.
+
+Requires Kirby 6. For Kirby 5, use version 1.
+
+## Articles
 
 Create a `site/help` folder with your articles:
 
@@ -61,28 +71,9 @@ Your help content here with **KirbyText** support.
 (image: screenshot.png)
 ```
 
+<img width="1280" height="800" alt="An article, half in the light and half in the dark Panel theme" src=".github/hero.png" />
+
 You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
-
-### Light and dark theme
-
-SVG images follow the Panel theme when you colour them with its [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
-
-```svg
-<rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
-```
-
-<img src=".github/images/illustration.png" alt="An SVG illustration, half in the light and half in the dark Panel theme" width="704">
-
-Screenshots need a dark copy with `-dark` in its name:
-
-```
-1_getting-started/
-├── article.txt           (image: screenshot.png)
-├── screenshot.png
-└── screenshot-dark.png   shown when the Panel is dark
-```
-
-<img src=".github/images/screenshot.png" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" width="608">
 
 ### Example category
 
@@ -93,6 +84,27 @@ Title: Editing Content
 ```
 
 If you don't add a `category.txt`, the folder name will be used as the title (e.g. "2_editing" → "Editing"). If you're not having to deal with German Ümläuts (or other fancy characters) in your folder names, don't worry about it.
+
+## Light and dark theme
+
+SVG images follow the Panel theme when you colour them with its [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
+
+```svg
+<rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
+```
+
+<img width="704" height="243" alt="An SVG illustration, half in the light and half in the dark Panel theme" src=".github/illustration.png" />
+
+Screenshots need a dark copy with `-dark` in its name:
+
+```
+1_getting-started/
+├── article.txt           (image: screenshot.png)
+├── screenshot.png
+└── screenshot-dark.png   shown when the Panel is dark
+```
+
+<img width="608" height="512" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" src=".github/screenshot.png" />
 
 ## Panel buttons, boxes and icons
 
@@ -127,8 +139,8 @@ Your edits go live when you click <k-button icon="check" theme="notice">Save</k-
 ```
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/images/buttons-dark.png">
-  <img src=".github/images/buttons.png" alt="A full-size download button, and a Save button inside a sentence" width="769">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/buttons-dark.png">
+  <img src=".github/buttons.png" alt="A full-size download button, and a Save button inside a sentence" width="769">
 </picture>
 
 ### Boxes
@@ -142,8 +154,8 @@ Boxes look like Kirby's info field and are handy for tips, warnings and other ca
 ```
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/images/box-dark.png">
-  <img src=".github/images/box.png" alt="A yellow warning box with an alert icon" width="976">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/box-dark.png">
+  <img src=".github/box.png" alt="A yellow warning box with an alert icon" width="976">
 </picture>
 
 Both attributes are optional:
@@ -162,8 +174,8 @@ Click the <k-icon name="add" alt="Add" /> button to add a block.
 ```
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/images/icon-dark.png">
-  <img src=".github/images/icon.png" alt="A sentence with an add icon in the middle" width="769">
+  <source media="(prefers-color-scheme: dark)" srcset=".github/icon-dark.png">
+  <img src=".github/icon.png" alt="A sentence with an add icon in the middle" width="769">
 </picture>
 
 An icon followed by a word or a bold label never ends up alone at the end of a line: the two always wrap together.
@@ -185,22 +197,6 @@ return [
 
 - The help menu item only appears if the `site/help` folder exists.
 - Help articles are trusted content (like your templates) – any HTML in them is rendered as-is.
-
-## Requirements
-
-Kirby 6. For Kirby 5, use version 1.
-
-## Installation
-
-### Composer
-
-```
-composer require medienbaecker/kirby-help-view
-```
-
-### Manual
-
-Download and copy this repository to `site/plugins/kirby-help-view`.
 
 ## Credits
 
