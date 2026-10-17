@@ -63,20 +63,24 @@ Your help content here with **KirbyText** support.
 
 You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
-### Images in both themes
+### Light and dark theme
 
-SVG images follow the Panel's theme. Colour them with the Panel's [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors) in `style` attributes:
+SVG images follow the Panel theme when you colour them with its [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
 
 ```svg
 <rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
-<text style="fill: var(--color-text)">Opening hours</text>
 ```
-
-Use `style` attributes, not a `<style>` element: the plugin places the SVG in the page, so a `<style>` element would change the whole Panel. The image's `alt` text becomes the SVG's label for screen readers.
 
 <img src=".github/images/illustration.png" alt="An SVG illustration, half in the light and half in the dark Panel theme" width="704">
 
-For a screenshot, put a dark version next to it with `-dark` added to the name: `screenshot-dark.png` next to `screenshot.png`. The Panel shows the one that matches its theme.
+Screenshots need a dark copy with `-dark` in its name:
+
+```
+1_getting-started/
+├── article.txt           (image: screenshot.png)
+├── screenshot.png
+└── screenshot-dark.png   shown when the Panel is dark
+```
 
 <img src=".github/images/screenshot.png" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" width="608">
 
