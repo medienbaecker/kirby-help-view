@@ -74,6 +74,8 @@ You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/l
 
 SVG images are placed into the page as markup, so they can use the Panel's [color variables](https://lab.getkirby.com/public/lab/basics/design/colors) and follow its light or dark theme, for example `fill: var(--color-text)` or `fill: light-dark(var(--color-gray-200), var(--color-gray-800))`. Write the colours as inline `style` attributes: a `<style>` element would apply to the whole Panel. The `alt` of the image tag becomes the SVG's label for screen readers.
 
+For a screenshot in the dark theme, put a copy with `-dark` added to its name next to it, such as `screenshot-dark.png` for `screenshot.png`. The Panel shows whichever matches its theme.
+
 ### Example category
 
 ```yaml

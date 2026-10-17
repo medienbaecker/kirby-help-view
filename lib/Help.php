@@ -249,8 +249,12 @@ class Help
 			function (array $m) use ($parent): string {
 				$src = self::attr($m[0], 'src');
 
-				if ($src === null || F::extension($src) !== 'svg') {
+				if ($src === null) {
 					return $m[0];
+				}
+
+				if (F::extension($src) !== 'svg') {
+					return self::darkVariant($m[0], $src, $parent);
 				}
 
 				$file = $parent->file(basename($src));
@@ -310,6 +314,20 @@ class Help
 	/**
 	 * Extract a double-quoted attribute value from a raw attribute string
 	 */
+	private static function darkVariant(string $img, string $src, HelpPage $parent): string
+	{
+		$dark = F::name($src) . '-dark.' . F::extension($src);
+
+		if ($parent->file($dark) === null) {
+			return $img;
+		}
+
+		$light = preg_replace('/^<img\b/i', '<img class="k-help-light" loading="lazy"', $img);
+		$img   = str_replace(basename($src), $dark, $img);
+
+		return $light . preg_replace('/^<img\b/i', '<img class="k-help-dark" loading="lazy"', $img);
+	}
+
 	private static function attr(string $attrs, string $name): ?string
 	{
 		if (preg_match('/\b' . preg_quote($name, '/') . '\s*=\s*"([^"]*)"/i', $attrs, $m)) {

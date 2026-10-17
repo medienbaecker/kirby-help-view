@@ -95,6 +95,15 @@ export default {
 </script>
 
 <style>
+.k-help-dark,
+.k-panel[data-theme="dark"] .k-help-light {
+	display: none;
+}
+
+.k-panel[data-theme="dark"] .k-help-dark {
+	display: block;
+}
+
 .k-help-view .k-text {
 	width: 100%;
 
