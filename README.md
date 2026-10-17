@@ -1,20 +1,11 @@
 # Kirby Help View
 
-A [Kirby](https://getkirby.com/) plugin that adds a help view to the Panel for your clients.
+A [Kirby](https://getkirby.com/) plugin that puts help for your clients into the Panel, right where they edit.
 
-## Features
+You write the articles as text files in your project, with KirbyText, categories and translations. They use the Panel's own buttons, boxes and icons, so the help looks like the screens it explains, in the light and the dark theme.
 
-- Custom Panel area with help articles
-- Supports categories with nested articles
-- KirbyText in articles (links, images, formatting)
-- Render real Panel buttons, boxes and icons inside articles
-- Icons and colors for each article card
-- Previous/next navigation between articles
-- Breadcrumbs for nested articles
-- Multilanguage support
-
-![Screenshot of the overview with cards for help articles](https://github.com/user-attachments/assets/996aa373-e4ad-4104-9c36-0401ff12d59d)
-![An article in the light and the dark Panel theme, split diagonally](.github/images/hero.png)
+![The help overview with article cards, half in the light and half in the dark Panel theme](.github/images/overview.png)
+![An article, half in the light and half in the dark Panel theme](.github/images/hero.png)
 
 ## Content Structure
 
@@ -72,13 +63,22 @@ Your help content here with **KirbyText** support.
 
 You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from the Kirby [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
-SVG images are placed into the page as markup, so they can use the Panel's [color variables](https://lab.getkirby.com/public/lab/basics/design/colors) and follow its light or dark theme, for example `fill: var(--color-text)` or `fill: light-dark(var(--color-gray-200), var(--color-gray-800))`. Write the colours as inline `style` attributes: a `<style>` element would apply to the whole Panel. The `alt` of the image tag becomes the SVG's label for screen readers.
+### Images in both themes
 
-<img src=".github/images/illustration.png" alt="An SVG illustration in the light and the dark Panel theme, split diagonally" width="704">
+SVG images follow the Panel's theme. Colour them with the Panel's [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors) in `style` attributes:
 
-For a screenshot in the dark theme, put a copy with `-dark` added to its name next to it, such as `screenshot-dark.png` for `screenshot.png`. The Panel shows whichever matches its theme.
+```svg
+<rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
+<text style="fill: var(--color-text)">Opening hours</text>
+```
 
-<img src=".github/images/screenshot.png" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" width="976">
+Use `style` attributes, not a `<style>` element: the plugin places the SVG in the page, so a `<style>` element would change the whole Panel. The image's `alt` text becomes the SVG's label for screen readers.
+
+<img src=".github/images/illustration.png" alt="An SVG illustration, half in the light and half in the dark Panel theme" width="704">
+
+For a screenshot, put a dark version next to it with `-dark` added to the name: `screenshot-dark.png` next to `screenshot.png`. The Panel shows the one that matches its theme.
+
+<img src=".github/images/screenshot.png" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" width="608">
 
 ### Example category
 
@@ -103,7 +103,7 @@ To make your documentation match what clients actually see, you can drop `<k-but
 Because they render as Kirby's own buttons, the [Kirby Lab](https://lab.getkirby.com) is the live, visual reference for the icons, themes, variants and sizes you can use. All attributes are optional:
 
 - `icon` – any icon name from the [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset)
-- `theme` – a button [theme](https://lab.getkirby.com/public/lab/components/buttons/2_themes) like `positive`, `negative`, `info` or `notice`. For page status buttons use the `-icon` variants: `negative-icon` (draft), `info-icon` (unlisted), `positive-icon` (listed).
+- `theme` – a [theme](https://lab.getkirby.com/public/lab/components/buttons/2_themes) such as `positive` or `negative`
 - `variant` – [`filled`](https://lab.getkirby.com/public/lab/components/buttons/1_variants) (default) or `dimmed`
 - `size` – [`xs`, `sm`, `md`, `lg`](https://lab.getkirby.com/public/lab/components/buttons/3_sizes) (default `md`)
 - `link` – turns the button into a link. Reference a file in the article's folder by name (e.g. `link="template.zip"`), just like the `(image:)` and `(file:)` tags. Relative URLs (e.g. `/panel/site`), `mailto:`, `tel:` and external links also work; external links open in a new tab.
@@ -113,8 +113,7 @@ Because they render as Kirby's own buttons, the [Kirby Lab](https://lab.getkirby
 A button on its own line renders at full size:
 
 ```html
-<k-button icon="add">Add</k-button>
-<k-button icon="trash" theme="negative">Delete</k-button>
+<k-button icon="download" link="style-guide.pdf" download>Download the style guide</k-button>
 ```
 
 Inside a sentence, a button shrinks to the text: it sits on the baseline, keeps the line height and never breaks between its icon and label. That makes it the way to name a Panel button in running text:
@@ -125,7 +124,7 @@ Your edits go live when you click <k-button icon="check" theme="notice">Save</k-
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/images/buttons-dark.png">
-  <img src=".github/images/buttons.png" alt="Add and Delete buttons on their own lines, and a Save button inside a sentence" width="769">
+  <img src=".github/images/buttons.png" alt="A full-size download button, and a Save button inside a sentence" width="769">
 </picture>
 
 ### Boxes
