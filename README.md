@@ -14,7 +14,7 @@ A [Kirby](https://getkirby.com/) plugin that adds a help view to the Panel for y
 - Multilanguage support
 
 ![Screenshot of the overview with cards for help articles](https://github.com/user-attachments/assets/996aa373-e4ad-4104-9c36-0401ff12d59d)
-![Screenshot of an article view](https://github.com/user-attachments/assets/5f389432-cefe-4c6c-813b-1f9f0035b5fd)
+![An article in the light and the dark Panel theme, split diagonally](.github/images/hero.png)
 
 ## Content Structure
 
@@ -74,7 +74,11 @@ You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/l
 
 SVG images are placed into the page as markup, so they can use the Panel's [color variables](https://lab.getkirby.com/public/lab/basics/design/colors) and follow its light or dark theme, for example `fill: var(--color-text)` or `fill: light-dark(var(--color-gray-200), var(--color-gray-800))`. Write the colours as inline `style` attributes: a `<style>` element would apply to the whole Panel. The `alt` of the image tag becomes the SVG's label for screen readers.
 
+<img src=".github/images/illustration.png" alt="An SVG illustration in the light and the dark Panel theme, split diagonally" width="704">
+
 For a screenshot in the dark theme, put a copy with `-dark` added to its name next to it, such as `screenshot-dark.png` for `screenshot.png`. The Panel shows whichever matches its theme.
+
+<img src=".github/images/screenshot.png" alt="A screenshot of a Panel dialog, its light version on the left and its dark version on the right" width="976">
 
 ### Example category
 
@@ -119,6 +123,11 @@ Inside a sentence, a button shrinks to the text: it sits on the baseline, keeps 
 Your edits go live when you click <k-button icon="check" theme="notice">Save</k-button>.
 ```
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/images/buttons-dark.png">
+  <img src=".github/images/buttons.png" alt="Add and Delete buttons on their own lines, and a Save button inside a sentence" width="769">
+</picture>
+
 ### Boxes
 
 Boxes look like Kirby's info field and are handy for tips, warnings and other callouts. Their content is KirbyText, so formatting, links, images and buttons work inside.
@@ -128,6 +137,11 @@ Boxes look like Kirby's info field and are handy for tips, warnings and other ca
   Here's some **important** information.
 </k-box>
 ```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/images/box-dark.png">
+  <img src=".github/images/box.png" alt="A yellow warning box with an alert icon" width="976">
+</picture>
 
 Both attributes are optional:
 
@@ -143,6 +157,11 @@ Icons are inline and decorative by default (`aria-hidden`). When an icon carries
 ```html
 Click the <k-icon name="add" alt="Add" /> button to add a block.
 ```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/images/icon-dark.png">
+  <img src=".github/images/icon.png" alt="A sentence with an add icon in the middle" width="769">
+</picture>
 
 An icon followed by a word or a bold label never ends up alone at the end of a line: the two always wrap together.
 
