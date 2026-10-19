@@ -75,7 +75,7 @@ The website rearranges text and images to fit each screen. On a phone, lines bre
 
 <img width="1280" height="800" alt="The example article, half in the light and half in the dark Panel theme" src=".github/hero.png" />
 
-You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colors from Kirby's [color variables](https://lab.getkirby.com/public/lab/basics/design/colors).
+You can define an icon from Kirby's [icon set](https://lab.getkirby.com/public/lab/basics/icons/1_iconset) and colours from Kirby's [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors).
 
 ### Example category
 
@@ -89,7 +89,7 @@ If you don't add a `category.txt`, the folder name will be used as the title (e.
 
 ## Light and dark theme
 
-SVG images follow the Panel theme when you color them with its [color variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
+SVG images follow the Panel theme when you colour them with its [colour variables](https://lab.getkirby.com/public/lab/basics/design/colors). Use `style` attributes, as a `<style>` element would restyle the whole Panel:
 
 ```svg
 <rect style="fill: light-dark(var(--color-gray-200), var(--color-gray-800))" />
