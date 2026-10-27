@@ -128,7 +128,7 @@ export default {
 
 	.k-help-button {
 		text-decoration: none;
-		color: inherit;
+		color: var(--button-color-text);
 		margin-block: var(--spacing-1);
 		margin-inline-end: var(--spacing-1);
 	}
