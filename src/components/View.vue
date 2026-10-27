@@ -188,6 +188,12 @@ export default {
 		--code-inline-color-back: var(--theme-color-300);
 		--code-inline-color-border: var(--theme-color-500);
 		--code-inline-color-text: var(--theme-color-900);
+		--button-filled-color-back: var(--code-inline-color-back);
+		--color-h: var(--box-color-text);
+
+		.k-help-button:where(:not([data-theme]), [data-theme$="-icon"]) {
+			--button-color-text: var(--code-inline-color-text);
+		}
 	}
 }
 </style>
