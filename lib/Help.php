@@ -311,9 +311,6 @@ class Help
 		return $url;
 	}
 
-	/**
-	 * Extract a double-quoted attribute value from a raw attribute string
-	 */
 	private static function darkVariant(string $img, string $src, HelpPage $parent): string
 	{
 		$dark = F::name($src) . '-dark.' . F::extension($src);
@@ -328,10 +325,13 @@ class Help
 		return $light . preg_replace('/^<img\b/i', '<img class="k-help-dark" loading="lazy"', $img);
 	}
 
+	/**
+	 * Extract a double-quoted attribute value from a raw attribute string
+	 */
 	private static function attr(string $attrs, string $name): ?string
 	{
 		if (preg_match('/\b' . preg_quote($name, '/') . '\s*=\s*"([^"]*)"/i', $attrs, $m)) {
-			return $m[1];
+			return html_entity_decode($m[1], ENT_QUOTES | ENT_HTML5);
 		}
 		return null;
 	}
