@@ -2,7 +2,7 @@
   "name": "medienbaecker/kirby-help-view",
   "description": "Display help articles directly in the Kirby Panel",
   "type": "kirby-plugin",
-  "version": "6.0.0-rc.6",
+  "version": "6.0.0-rc.7",
   "license": "MIT",
   "authors": [
     {
