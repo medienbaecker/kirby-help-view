@@ -27,7 +27,7 @@ class HelpPage extends Page
 		$collection = new Files([], $this);
 		$root = $this->root();
 
-		if ($root === null || Dir::exists($root) === false) {
+		if (Dir::exists($root) === false) {
 			return $this->files = $collection;
 		}
 
