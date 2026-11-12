@@ -2,6 +2,7 @@
 
 namespace Medienbaecker\HelpView;
 
+use Kirby\Cms\Inventory;
 use Kirby\Content\Content;
 use Kirby\Data\Txt;
 use Kirby\Filesystem\Dir;
@@ -438,7 +439,7 @@ class Help
 
 	private static function slug(string $name): string
 	{
-		if (($pos = strpos($name, Dir::$numSeparator)) !== false) {
+		if (($pos = strpos($name, Inventory::$numSeparator)) !== false) {
 			return substr($name, $pos + 1);
 		}
 		return $name;
