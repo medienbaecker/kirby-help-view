@@ -12,7 +12,7 @@
   ],
   "require": {
     "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-    "getkirby/cms": "^6.0",
+    "getkirby/cms": "^6.0.0-beta.4",
     "getkirby/composer-installer": "^1.2"
   }
 }
