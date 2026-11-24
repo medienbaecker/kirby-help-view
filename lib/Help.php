@@ -327,12 +327,12 @@ class Help
 	}
 
 	/**
-	 * Extract a double-quoted attribute value from a raw attribute string
+	 * Extract a quoted attribute value from a raw attribute string
 	 */
 	private static function attr(string $attrs, string $name): ?string
 	{
-		if (preg_match('/\b' . preg_quote($name, '/') . '\s*=\s*"([^"]*)"/i', $attrs, $m)) {
-			return html_entity_decode($m[1], ENT_QUOTES | ENT_HTML5);
+		if (preg_match('/\b' . preg_quote($name, '/') . '\s*=\s*(["\'])(.*?)\1/is', $attrs, $m)) {
+			return html_entity_decode($m[2], ENT_QUOTES | ENT_HTML5);
 		}
 		return null;
 	}
@@ -399,7 +399,7 @@ class Help
 		$link    = self::safeUrl($file?->url() ?? $rawLink);
 
 		// a bare `download` (no value) saves the linked file under its own name
-		$flags    = preg_replace('/\S+="[^"]*"/', '', $attrs);
+		$flags    = preg_replace('/\S+=(["\'])(.*?)\1/s', '', $attrs);
 		$download = preg_match('/\bdownload\b/i', $flags) ? $file?->filename() : null;
 
 		// Nothing to show
