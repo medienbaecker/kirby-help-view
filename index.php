@@ -2,6 +2,7 @@
 
 use Kirby\Cms\App as Kirby;
 use Kirby\Data\Json;
+use Kirby\Exception\NotFoundException;
 use Kirby\Filesystem\Dir;
 use Kirby\Filesystem\F;
 use Kirby\Http\Response;
@@ -102,6 +103,13 @@ Kirby::plugin('medienbaecker/help-view', [
 							$current  = $result['article'];
 							$category = $result['category'];
 
+							if (!$current) {
+								throw new NotFoundException(
+									key: 'page.notFound',
+									data: ['slug' => $slug]
+								);
+							}
+
 							// Build breadcrumb (area name is added automatically)
 							$breadcrumb = [];
 
@@ -109,16 +117,14 @@ Kirby::plugin('medienbaecker/help-view', [
 								$breadcrumb[] = ['label' => $category];
 							}
 
-							if ($current) {
-								$breadcrumb[] = [
-									'label' => $current['title'],
-									'link'  => 'help/' . $current['slug']
-								];
-							}
+							$breadcrumb[] = [
+								'label' => $current['title'],
+								'link'  => 'help/' . $current['slug']
+							];
 
 							return [
 								'component'  => 'k-help-view',
-								'title'      => $current['title'] ?? t('medienbaecker.help-view.title'),
+								'title'      => $current['title'],
 								'breadcrumb' => $breadcrumb,
 								'props'      => [
 									'articles' => $articles,
